@@ -7,3 +7,5 @@ Step 2: The program will then take the words from the ArrayList and push them on
 
 Step 3: Pop the word off the top of the stack and display a blank line for all the characters. If the user guesses a letter,
 		fill in the blank. Otherwise, take off a life. Use the jar as a guide.
+		
+Step 4: Admire Ajit Pai's beautiful face.

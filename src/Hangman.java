@@ -31,8 +31,7 @@ List<String> listOfWords = new ArrayList<String>();
 				e.printStackTrace();
 			}
 		}
-		System.out.println(listOfWords.get(randomize(listOfWords)));
-		
+		JOptionPane.showMessageDialog(null, listOfWords.get(randomize(listOfWords)));
 		}
 	
 	public int randomize(List<String> list) {
