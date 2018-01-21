@@ -1,3 +1,5 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,16 +13,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Hangman {
+public class Hangman implements KeyListener{
+	String randomWord;
 BufferedReader reader;
 String fromIntToIndex;
 List<String> listOfWords = new ArrayList<String>();
 int inVal;
 Stack<String> stackOfRandomlyAssortedWords = new Stack<String>();
 
+char guessedWord;
+
 JFrame frame;
 JPanel panel;
 JLabel label;
+
+String newWord = "";
+
+boolean completed;
 
 String hiddenWord = "";
 
@@ -37,8 +46,10 @@ String hiddenWord = "";
 		panel.add(label);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addKeyListener(this);
 		frame.setVisible(true);
 		frame.pack();
+		
 //		frame.setResizable(false);
 	}
 	
@@ -72,12 +83,45 @@ String hiddenWord = "";
 	}
 
 	private String wordToSolve() {
-		String randomWord = stackOfRandomlyAssortedWords.pop();
+		 randomWord = stackOfRandomlyAssortedWords.pop();
 		for (int i = 0; i < randomWord.length(); i++) {
 			hiddenWord += "_";randomWord.length();
 			System.out.println(randomWord.length());
 		}
+		
 		return hiddenWord;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		guessedWord = e.getKeyChar();
+		System.out.println("Hi.");
+		
+		for(int i = 0; i < randomWord.length(); i++) {
+		if(randomWord.contains("" + guessedWord)) {
+				char c = randomWord.charAt(i);
+				if(c == guessedWord) {
+					hiddenWord+=guessedWord;
+					label.setText(hiddenWord);
+//					System.out.println(hiddenWord);
+				}else {
+					hiddenWord += c;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
