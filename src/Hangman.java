@@ -3,11 +3,15 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -95,27 +99,27 @@ String hiddenWord = "";
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		guessedWord = e.getKeyChar();
-		System.out.println("Hi.");
 		
-		for(int i = 0; i < randomWord.length(); i++) {
-		if(randomWord.contains("" + guessedWord)) {
-				char c = randomWord.charAt(i);
-				if(c == guessedWord) {
-					hiddenWord+=guessedWord;
-					label.setText(hiddenWord);
-//					System.out.println(hiddenWord);
-				}else {
-					hiddenWord += c;
-				}
-			}
-		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		guessedWord = e.getKeyChar();
 		
+		for(int i = 0; i < randomWord.length(); i++) {
+		if(randomWord.contains("" + guessedWord)) {
+				char c = randomWord.charAt(i);
+				if(c == guessedWord) {
+					hiddenWord="";
+					hiddenWord+=c;
+					label.setText(""+hiddenWord);
+//					System.out.println(hiddenWord);
+				}else {
+					hiddenWord += guessedWord;
+				}
+			}
+		}
 	}
 
 	@Override
