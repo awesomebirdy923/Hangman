@@ -23,9 +23,9 @@ public class Hangman implements KeyListener{
 	static String randomWord;
 BufferedReader reader;
 String fromIntToIndex;
-List<String> listOfWords = new ArrayList<String>();
-int inVal;
-Stack<String> stackOfRandomlyAssortedWords = new Stack<String>();
+static List<String> listOfWords = new ArrayList<String>();
+static int inVal;
+static Stack<String> stackOfRandomlyAssortedWords = new Stack<String>();
 
 char guessedWord;
 
@@ -33,12 +33,16 @@ JFrame frame;
 JPanel panel;
 JLabel label;
 
+static int randomIndex;
+
 String newWord = "";
 static String underscores = "";
 
-boolean completed;
+static boolean completed;
 
-String hiddenWord = "";
+static boolean running = false;
+
+static String hiddenWord = "";
 
 	public Hangman() {
 		
@@ -57,7 +61,7 @@ String hiddenWord = "";
 		frame.addKeyListener(this);
 		frame.setVisible(true);
 		frame.pack();
-		
+		running = true;
 //		frame.setResizable(false);
 	}
 	
@@ -68,6 +72,7 @@ String hiddenWord = "";
 		for (int i = 0; i < inVal; i++) {
 			try {
 				listOfWords.add(reader.readLine());
+				System.out.println(listOfWords.size());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -76,10 +81,13 @@ String hiddenWord = "";
 		randomize();
 		}
 	
-	public void randomize() {
+	public static void randomize() {
 		List<String> assortedWords = new ArrayList<String>();
 		for (int i = 0; i < inVal; i++) {
-			int randomIndex = new Random().nextInt(listOfWords.size());
+			System.out.println(randomIndex);
+			if(listOfWords.size() != 0) {
+			randomIndex = new Random().nextInt(listOfWords.size());
+			}
 			assortedWords.add(listOfWords.get(randomIndex));
 			stackOfRandomlyAssortedWords.push(listOfWords.get(randomIndex));
 //			System.out.println(stackOfRandomlyAssortedWords.peek());
@@ -110,17 +118,20 @@ String hiddenWord = "";
 		
 	}
 
+	public static void update() {
+		
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
 		guessedWord = e.getKeyChar();
 		String newString = "";
 		
 		for (int i = 0; i < randomWord.length(); i++) {
 			if(guessedWord == randomWord.charAt(i)) {
 				newString += randomWord.charAt(i);
-			}else {
-				newString += underscores.charAt(i);
 				try {
 					playSound("grunt.wav");
 				} catch (UnsupportedAudioFileException e1) {
@@ -130,10 +141,28 @@ String hiddenWord = "";
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+			}else {
+				newString += underscores.charAt(i);
+				
 			}
+			
 		}
-		
 		underscores = newString;
+		if(!newString.contains("_")) {
+			System.out.println("Win");
+			completed = true;
+			try {
+				playSound("win.wav");
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			randomize();
+			completed = false;
+		}
 		label.setText(newString);
 	}
 
