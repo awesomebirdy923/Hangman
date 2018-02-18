@@ -29,9 +29,12 @@ static Stack<String> stackOfRandomlyAssortedWords = new Stack<String>();
 
 char guessedWord;
 
+static int score = 10;
+
 JFrame frame;
 JPanel panel;
 JLabel label;
+JLabel scoreLabel;
 
 static int randomIndex;
 
@@ -54,8 +57,10 @@ static String hiddenWord = "";
 		testIndexSearcher(reader);
 		frame = new JFrame();
 		panel = new JPanel();
+		scoreLabel = new JLabel("" + score); 
 		label = new JLabel(wordToSolve());
 		panel.add(label);
+		panel.add(scoreLabel);
 		frame.add(panel);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addKeyListener(this);
@@ -101,6 +106,8 @@ static String hiddenWord = "";
 	}
 
 	private String wordToSolve() {
+		hiddenWord = "";
+		underscores = "";
 		 randomWord = stackOfRandomlyAssortedWords.pop();
 		for (int i = 0; i < randomWord.length(); i++) {
 			hiddenWord += "_";
@@ -115,19 +122,9 @@ static String hiddenWord = "";
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
-	}
-
-	public static void update() {
-		
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 		guessedWord = e.getKeyChar();
 		String newString = "";
+		if(checkIfPlayerHasLost(score)) {
 		
 		for (int i = 0; i < randomWord.length(); i++) {
 			if(guessedWord == randomWord.charAt(i)) {
@@ -143,11 +140,12 @@ static String hiddenWord = "";
 				}
 			}else {
 				newString += underscores.charAt(i);
-				
+				score--;
 			}
 			
 		}
 		underscores = newString;
+		label.setText(newString);			
 		if(!newString.contains("_")) {
 			System.out.println("Win");
 			completed = true;
@@ -160,10 +158,43 @@ static String hiddenWord = "";
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			randomize();
 			completed = false;
+			wordToSolve();
+			label.setText(hiddenWord);
+			score++;
+//			randomize();
 		}
-		label.setText(newString);
+		scoreLabel.setText("" + score);
+		}else {
+			scoreLabel.setText("");
+			label.setText("GIT GUD SKR00B11!!!!!1!");
+			try {
+				playSound("lose.wav");
+			} catch (UnsupportedAudioFileException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	private boolean checkIfPlayerHasLost(int score) {
+		if(score < 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public static void update() {
+		
+	}
+	
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+
 	}
 
 	@Override
